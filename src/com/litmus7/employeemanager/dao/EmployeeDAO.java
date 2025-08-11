@@ -1,5 +1,6 @@
 package com.litmus7.employeemanager.dao;
 
+import com.litmus7.employeemanager.constants.Constants;
 import com.litmus7.employeemanager.model.Employee;
 import com.litmus7.employeemanager.util.DatabaseConnectionUtil;
 import java.sql.Connection;
@@ -11,21 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAO {
-
-    private static final String INSERT_EMPLOYEE =
-        "INSERT INTO employees (id, first_name, last_name, mobile_number, email, joining_date, active_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL_EMPLOYEES =
-        "SELECT id, first_name, last_name, mobile_number, email, joining_date, active_status FROM employees";
-    private static final String SELECT_ONE_EMPLOYEE =
-        "SELECT id, first_name, last_name, mobile_number, email, joining_date, active_status FROM employees WHERE id = ?";
-    private static final String UPDATE_EMPLOYEE =
-        "UPDATE employees SET first_name = ?, last_name = ?, mobile_number = ?, email = ?, joining_date = ?, active_status = ? WHERE id = ?";
-    private static final String DELETE_EMPLOYEE = "DELETE FROM employees WHERE id = ?";
-
     public boolean createEmployee(Employee emp) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPLOYEE)
+            PreparedStatement preparedStatement = connection.prepareStatement(Constants.INSERT_EMPLOYEE)
         ) {
             preparedStatement.setInt(1, emp.getId());
             preparedStatement.setString(2, emp.getFirstName());
@@ -47,7 +37,7 @@ public class EmployeeDAO {
         List<Employee> employees = new ArrayList<>();
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_EMPLOYEES)
+            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_ALL_EMPLOYEES)
         ) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -72,7 +62,7 @@ public class EmployeeDAO {
     public Employee getEmployeeById(int id) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ONE_EMPLOYEE)
+            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_ONE_EMPLOYEE)
         ) {
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -97,7 +87,7 @@ public class EmployeeDAO {
     public boolean updateEmployee(Employee emp) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_EMPLOYEE)
+            PreparedStatement preparedStatement = connection.prepareStatement(Constants.UPDATE_EMPLOYEE)
         ) {
             preparedStatement.setString(1, emp.getFirstName());
             preparedStatement.setString(2, emp.getLastName());
@@ -117,7 +107,7 @@ public class EmployeeDAO {
     public boolean deleteEmployee(int id) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EMPLOYEE)
+            PreparedStatement preparedStatement = connection.prepareStatement(Constants.DELETE_EMPLOYEE)
         ) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();

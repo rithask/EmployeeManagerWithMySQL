@@ -2,6 +2,8 @@ package com.litmus7.employeemanager.util;
 
 import java.time.LocalDate;
 
+import com.litmus7.employeemanager.constants.Constants;
+
 public class ValidationUtil {
 
     public static boolean isValidId(int id) {
@@ -12,17 +14,17 @@ public class ValidationUtil {
     }
 
     public static boolean isValidName(String name) {
-        return name != null && !name.isBlank() && name.matches("^[A-za-z\\s'-]{2,50}$");
+        return name != null && !name.isBlank() && name.matches(Constants.NAME_REGEX);
     }
 
     public static boolean isValidEmail(String email) {
         if (email == null || email.isBlank()) return false;
-        return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.(com|in|org|net)$");
+        return email.matches(Constants.EMAIL_REGEX);
     }
 
     public static boolean isValidMobileNo(String number) {
         if (number == null) return false;
-        return number.matches("^[1-9][0-9]{9}$");
+        return number.matches(Constants.MOBILE_NUMBER_REGEX);
     }
 
     public static boolean isValidJoiningDate(LocalDate date) {
