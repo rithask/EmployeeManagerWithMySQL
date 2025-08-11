@@ -1,6 +1,7 @@
 package com.litmus7.employeemanager.app;
 
 import com.litmus7.employeemanager.controller.EmployeeController;
+import com.litmus7.employeemanager.exception.ValidationException;
 import com.litmus7.employeemanager.model.Employee;
 import com.litmus7.employeemanager.util.InputUtil;
 import com.litmus7.employeemanager.util.ValidationUtil;
@@ -39,33 +40,37 @@ public class EmployeeManagerApp {
 
             System.out.println();
 
-            switch (userChoice) {
-                case 1:
-                    tempEmp = readDataFromUser(scanner);
-                    controller.addEmployeeToDB(tempEmp);
-                    break;
-                case 2:
-                    List<Employee> employees = controller.getAllEmployeesFromDB();
-                    employees.forEach(System.out::println);
-                    break;
-                case 3:
-                    tempId = InputUtil.readInt(scanner, "Enter the ID of the employee you want to fetch: ");
-                    System.out.println(controller.getEmployeeByIdFromDB(tempId));
-                    break;
-                case 4:
-                    System.out.println("Enter the details of the employee you want to updated...");
-                    tempEmp = readDataFromUser(scanner);
-                    controller.updateEmployeeInDB(tempEmp);
-                    break;
-                case 5:
-                    tempId = InputUtil.readInt(scanner, "Enter the ID of the employee you want to delete: ");
-                    controller.deleteEmployeeFromDB(tempId);
-                    break;
-                case 6:
-                    System.out.println("Exiting...");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please enter a number between 1 and 6.");
+            try {
+                switch (userChoice) {
+                    case 1:
+                        tempEmp = readDataFromUser(scanner);
+                        controller.addEmployeeToDB(tempEmp);
+                        break;
+                    case 2:
+                        List<Employee> employees = controller.getAllEmployeesFromDB();
+                        employees.forEach(System.out::println);
+                        break;
+                    case 3:
+                        tempId = InputUtil.readInt(scanner, "Enter the ID of the employee you want to fetch: ");
+                        System.out.println(controller.getEmployeeByIdFromDB(tempId));
+                        break;
+                    case 4:
+                        System.out.println("Enter the details of the employee you want to updated...");
+                        tempEmp = readDataFromUser(scanner);
+                        controller.updateEmployeeInDB(tempEmp);
+                        break;
+                    case 5:
+                        tempId = InputUtil.readInt(scanner, "Enter the ID of the employee you want to delete: ");
+                        controller.deleteEmployeeFromDB(tempId);
+                        break;
+                    case 6:
+                        System.out.println("Exiting...");
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please enter a number between 1 and 6.");
+                }
+            } catch (ValidationException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
