@@ -4,7 +4,6 @@ import com.litmus7.employeemanager.dao.EmployeeDAO;
 import com.litmus7.employeemanager.exception.ValidationException;
 import com.litmus7.employeemanager.model.Employee;
 import com.litmus7.employeemanager.util.ValidationUtil;
-
 import java.util.List;
 
 public class EmployeeService {
@@ -30,7 +29,7 @@ public class EmployeeService {
     public boolean deleteEmployeeFromDB(int id) {
         return employeeDAO.deleteEmployee(id);
     }
-    
+
     public void validateEmployee(Employee emp) {
         if (!ValidationUtil.isValidId(emp.getId())) {
             throw new ValidationException("ID must be a positive integer");
