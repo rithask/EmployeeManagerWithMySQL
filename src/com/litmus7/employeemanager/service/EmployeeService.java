@@ -11,22 +11,38 @@ public class EmployeeService {
     EmployeeDAO employeeDAO = new EmployeeDAO();
 
     public boolean addEmployeeToDb(Employee emp) {
+        if (emp == null) throw new ValidationException("Employee cannot be null");
+        validateEmployee(emp);
+
         return employeeDAO.createEmployee(emp);
     }
 
     public List<Employee> getAllEmployeesFromDB() {
+        if (employeeDAO.getAllEmployees().isEmpty()) {
+            throw new ValidationException("No employees found");
+        }
+
         return employeeDAO.getAllEmployees();
     }
 
     public Employee getEmployeeByIdFromDB(int id) {
-        return employeeDAO.getEmployeeById(id);
+        if (id <= 0) throw new ValidationException("ID must be a positive integer");
+
+        Employee emp = employeeDAO.getEmployeeById(id);
+        if (emp == null) throw new ValidationException("Employee does not exist");
+
+        return emp;
     }
 
     public boolean updateEmployeeInDb(Employee emp) {
+        validateEmployee(emp);
         return employeeDAO.updateEmployee(emp);
     }
 
     public boolean deleteEmployeeFromDB(int id) {
+        if (id <= 0) throw new ValidationException("ID must be a positive integer");
+        if (!employeeDAO.employeeExists(id)) throw new ValidationException("Employee does not exist");
+
         return employeeDAO.deleteEmployee(id);
     }
 

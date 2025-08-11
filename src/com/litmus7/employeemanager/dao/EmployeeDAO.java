@@ -78,7 +78,7 @@ public class EmployeeDAO {
                     rs.getObject("joining_date", LocalDate.class),
                     rs.getBoolean("active_status")
                 );
-            }
+            } else return null;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -111,9 +111,23 @@ public class EmployeeDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.DELETE_EMPLOYEE)
         ) {
             preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 
-            return true;
+    public boolean employeeExists(int id) {
+        try (
+            Connection connection = DatabaseConnectionUtil.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_ONE_EMPLOYEE)
+        ) {
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return true;
+            } else return false;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
