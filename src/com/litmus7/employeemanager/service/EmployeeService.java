@@ -12,7 +12,7 @@ public class EmployeeService {
         return employeeDAO.createEmployee(emp);
     }
 
-    public List<Employee> getAllEmplyeesFromDB() {
+    public List<Employee> getAllEmployeesFromDB() {
         return employeeDAO.getAllEmployees();
     }
 

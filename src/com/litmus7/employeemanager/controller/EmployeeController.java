@@ -13,7 +13,7 @@ public class EmployeeController {
     }
 
     public List<Employee> getAllEmployeesFromDB() {
-        return employeeService.getAllEmplyeesFromDB();
+        return employeeService.getAllEmployeesFromDB();
     }
 
     public Employee getEmployeeByIdFromDB(int id) {
