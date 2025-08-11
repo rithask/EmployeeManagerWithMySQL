@@ -2,6 +2,7 @@ package com.litmus7.employeemanager.app;
 
 import com.litmus7.employeemanager.controller.EmployeeController;
 import com.litmus7.employeemanager.model.Employee;
+import com.litmus7.employeemanager.util.InputUtil;
 import com.litmus7.employeemanager.util.ValidationUtil;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -48,16 +49,7 @@ public class EmployeeManagerApp {
                     employees.forEach(System.out::println);
                     break;
                 case 3:
-                    tempId = 0;
-                    do {
-                        System.out.print("Enter the ID of the employee you want to fetch: ");
-                        try {
-                            tempId = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("ID should be a number");
-                            continue;
-                        }
-                    } while (!ValidationUtil.isValidId(tempId));
+                    tempId = InputUtil.readInt(scanner, "Enter the ID of the employee you want to fetch: ");
                     System.out.println(controller.getEmployeeByIdFromDB(tempId));
                     break;
                 case 4:
@@ -66,16 +58,7 @@ public class EmployeeManagerApp {
                     controller.updateEmployeeInDB(tempEmp);
                     break;
                 case 5:
-                    tempId = 0;
-                    do {
-                        System.out.print("Enter the ID of the employee you want to fetch: ");
-                        try {
-                            tempId = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("ID should be a number");
-                            continue;
-                        }
-                    } while (!ValidationUtil.isValidId(tempId));
+                    tempId = InputUtil.readInt(scanner, "Enter the ID of the employee you want to delete: ");
                     controller.deleteEmployeeFromDB(tempId);
                     break;
                 case 6:
