@@ -63,7 +63,7 @@ public class EmployeeDAO {
     public Employee getEmployeeById(int id) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_ONE_EMPLOYEE)
+            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_EMPLOYEE_BY_ID)
         ) {
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -118,16 +118,48 @@ public class EmployeeDAO {
         }
     }
 
-    public boolean employeeExists(int id) {
+    public boolean employeeExistsById(int id) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_ONE_EMPLOYEE)
+            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_EMPLOYEE_BY_ID)
         ) {
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 return true;
             } else return false;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean employeeExistsByEmail(String email) {
+        try (
+            Connection connection = DatabaseConnectionUtil.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_EMPLOYEE_BY_EMAIL)
+        ) {
+            preparedStatement.setString(1, email);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) return true;
+            else return false;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean employeeExistsByMobileNumber(String mobileNumber) {
+        try (
+            Connection connection = DatabaseConnectionUtil.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                Constants.SELECT_EMPLOYEE_BY_MOBILE_NUMBER
+            )
+        ) {
+            preparedStatement.setString(1, mobileNumber);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) return true;
+            else return false;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;

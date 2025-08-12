@@ -12,6 +12,12 @@ public class EmployeeService {
 
     public boolean addEmployeeToDb(Employee emp) {
         if (emp == null) throw new ValidationException("Employee cannot be null");
+        if (employeeDAO.employeeExistsByEmail(emp.getEmail())) throw new ValidationException(
+            "An employee with same e-mail ID already exists"
+        );
+        if (employeeDAO.employeeExistsByMobileNumber(emp.getMobileNo())) throw new ValidationException(
+            "An employee with same mobile number already exists"
+        );
         validateEmployee(emp);
 
         return employeeDAO.createEmployee(emp);
@@ -41,7 +47,7 @@ public class EmployeeService {
 
     public boolean deleteEmployeeFromDB(int id) {
         if (id <= 0) throw new ValidationException("ID must be a positive integer");
-        if (!employeeDAO.employeeExists(id)) throw new ValidationException("Employee does not exist");
+        if (!employeeDAO.employeeExistsById(id)) throw new ValidationException("Employee does not exist");
 
         return employeeDAO.deleteEmployee(id);
     }

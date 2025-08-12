@@ -17,8 +17,12 @@ public class Constants {
         "INSERT INTO employees (id, first_name, last_name, mobile_number, email, joining_date, active_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
     public static final String SELECT_ALL_EMPLOYEES =
         "SELECT id, first_name, last_name, mobile_number, email, joining_date, active_status FROM employees";
-    public static final String SELECT_ONE_EMPLOYEE =
+    public static final String SELECT_EMPLOYEE_BY_ID =
         "SELECT id, first_name, last_name, mobile_number, email, joining_date, active_status FROM employees WHERE id = ?";
+    public static final String SELECT_EMPLOYEE_BY_EMAIL =
+        "SELECT id, first_name, last_name, mobile_number, email, joining_date, active_status FROM employees WHERE email = ?";
+    public static final String SELECT_EMPLOYEE_BY_MOBILE_NUMBER =
+        "SELECT id, first_name, last_name, mobile_number, email, joining_date, active_status FROM employees WHERE mobile_number = ?";
     public static final String UPDATE_EMPLOYEE =
         "UPDATE employees SET first_name = ?, last_name = ?, mobile_number = ?, email = ?, joining_date = ?, active_status = ? WHERE id = ?";
     public static final String DELETE_EMPLOYEE = "DELETE FROM employees WHERE id = ?";
