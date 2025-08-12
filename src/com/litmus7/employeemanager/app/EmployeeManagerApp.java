@@ -55,7 +55,7 @@ public class EmployeeManagerApp {
                         System.out.println(controller.getEmployeeByIdFromDB(tempId));
                         break;
                     case 4:
-                        System.out.println("Enter the details of the employee you want to updated...");
+                        System.out.println("Enter the details of the employee you want to update...");
                         tempEmp = readDataFromUser(scanner);
                         controller.updateEmployeeInDB(tempEmp);
                         break;
