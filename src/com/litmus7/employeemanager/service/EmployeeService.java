@@ -12,6 +12,9 @@ public class EmployeeService {
 
     public boolean addEmployeeToDb(Employee emp) {
         if (emp == null) throw new ValidationException("Employee cannot be null");
+        if (employeeDAO.employeeExistsById(emp.getId())) throw new ValidationException(
+            "An employee with same ID already exists"
+        );
         if (employeeDAO.employeeExistsByEmail(emp.getEmail())) throw new ValidationException(
             "An employee with same e-mail ID already exists"
         );
