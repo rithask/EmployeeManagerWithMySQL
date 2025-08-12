@@ -13,13 +13,13 @@ public class EmployeeService {
     public boolean addEmployeeToDb(Employee emp) {
         if (emp == null) throw new ValidationException("Employee cannot be null");
         if (employeeDAO.employeeExistsById(emp.getId())) throw new ValidationException(
-            "An employee with same ID already exists"
+            "An employee with ID " + emp.getId() + " already exists"
         );
         if (employeeDAO.employeeExistsByEmail(emp.getEmail())) throw new ValidationException(
-            "An employee with same e-mail ID already exists"
+            "An employee with e-mail " + emp.getEmail() + " already exists"
         );
         if (employeeDAO.employeeExistsByMobileNumber(emp.getMobileNo())) throw new ValidationException(
-            "An employee with same mobile number already exists"
+            "An employee with mobile number " + emp.getMobileNo() + " already exists"
         );
         validateEmployee(emp);
 
@@ -38,19 +38,26 @@ public class EmployeeService {
         if (id <= 0) throw new ValidationException("ID must be a positive integer");
 
         Employee emp = employeeDAO.getEmployeeById(id);
-        if (emp == null) throw new ValidationException("Employee does not exist");
+        if (emp == null) throw new ValidationException("No employee found with ID: " + id);
 
         return emp;
     }
 
     public boolean updateEmployeeInDb(Employee emp) {
+        if (emp == null) throw new ValidationException("Employee cannot be null");
+        if (!employeeDAO.employeeExistsById(emp.getId())) throw new ValidationException(
+            "Cannot update. No employee found with ID: " + emp.getId()
+        );
+
         validateEmployee(emp);
         return employeeDAO.updateEmployee(emp);
     }
 
     public boolean deleteEmployeeFromDB(int id) {
         if (id <= 0) throw new ValidationException("ID must be a positive integer");
-        if (!employeeDAO.employeeExistsById(id)) throw new ValidationException("Employee does not exist");
+        if (!employeeDAO.employeeExistsById(id)) throw new ValidationException(
+            "Cannot delete. No employee found with ID: " + id
+        );
 
         return employeeDAO.deleteEmployee(id);
     }
