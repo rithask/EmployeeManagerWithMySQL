@@ -7,7 +7,7 @@ public class Employee {
     private int id;
     private String firstName;
     private String lastName;
-    private String mobileNo;
+    private String mobileNumber;
     private String email;
     private LocalDate joiningDate;
     private boolean active;
@@ -18,7 +18,7 @@ public class Employee {
         int id,
         String firstName,
         String lastName,
-        String mobileNo,
+        String mobileNumber,
         String email,
         LocalDate joiningDate,
         boolean active
@@ -26,7 +26,7 @@ public class Employee {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.mobileNo = mobileNo;
+        this.mobileNumber = mobileNumber;
         this.email = email;
         this.joiningDate = joiningDate;
         this.active = active;
@@ -44,8 +44,8 @@ public class Employee {
         return this.lastName;
     }
 
-    public String getMobileNo() {
-        return this.mobileNo;
+    public String getMobileNumber() {
+        return this.mobileNumber;
     }
 
     public String getEmail() {
@@ -72,8 +72,8 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public void setMobileNo(String mobileNo) {
-        this.mobileNo = mobileNo;
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public void setEmail(String email) {
@@ -100,7 +100,7 @@ public class Employee {
             id,
             firstName,
             lastName,
-            mobileNo,
+            mobileNumber,
             email,
             joiningDate,
             active

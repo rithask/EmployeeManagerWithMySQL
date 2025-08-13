@@ -19,7 +19,7 @@ public class EmployeeManagerApp {
         int tempId = 0;
         Employee tempEmp = null;
 
-        EmployeeController controller = new EmployeeController();
+        EmployeeController employeeController = new EmployeeController();
 
         while (userChoice != 6) {
             System.out.println();
@@ -42,7 +42,7 @@ public class EmployeeManagerApp {
             switch (userChoice) {
                 case 1:
                     tempEmp = readDataFromUser(scanner);
-                    Response<Employee> employeeAddResponse = controller.addEmployeeToDB(tempEmp);
+                    Response<Employee> employeeAddResponse = employeeController.addEmployeeToDB(tempEmp);
                     if (employeeAddResponse.isSuccess()) {
                         System.out.println("Employee added successfully");
                     } else {
@@ -50,7 +50,7 @@ public class EmployeeManagerApp {
                     }
                     break;
                 case 2:
-                    Response<List<Employee>> employeesFetchResponse = controller.getAllEmployeesFromDB();
+                    Response<List<Employee>> employeesFetchResponse = employeeController.getAllEmployeesFromDB();
                     if (employeesFetchResponse.isSuccess()) {
                         employeesFetchResponse.getData().forEach(System.out::println);
                     } else {
@@ -59,7 +59,7 @@ public class EmployeeManagerApp {
                     break;
                 case 3:
                     tempId = InputUtil.readInt(scanner, "Enter the ID of the employee you want to fetch: ");
-                    Response<Employee> employeeFetchResponse = controller.getEmployeeByIdFromDB(tempId);
+                    Response<Employee> employeeFetchResponse = employeeController.getEmployeeByIdFromDB(tempId);
                     if (employeeFetchResponse.isSuccess()) {
                         System.out.println(employeeFetchResponse.getData());
                     } else {
@@ -69,7 +69,7 @@ public class EmployeeManagerApp {
                 case 4:
                     System.out.println("Enter the details of the employee you want to update...");
                     tempEmp = readDataFromUser(scanner);
-                    Response<?> employeeUpdateResponse = controller.updateEmployeeInDB(tempEmp);
+                    Response<?> employeeUpdateResponse = employeeController.updateEmployeeInDB(tempEmp);
                     if (employeeUpdateResponse.isSuccess()) {
                         System.out.println("Employee updated successfully");
                     } else {
@@ -78,8 +78,9 @@ public class EmployeeManagerApp {
                     break;
                 case 5:
                     tempId = InputUtil.readInt(scanner, "Enter the ID of the employee you want to delete: ");
-                    Response<?> employeeDeleteResponse = controller.deleteEmployeeFromDB(tempId);
+                    Response<?> employeeDeleteResponse = employeeController.deleteEmployeeFromDB(tempId);
                     System.out.println(employeeDeleteResponse.getMessage());
+                    break;
                 case 6:
                     System.out.println("Exiting...");
                     break;

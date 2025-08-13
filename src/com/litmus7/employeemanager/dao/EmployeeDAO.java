@@ -13,18 +13,18 @@ import java.util.List;
 
 public class EmployeeDAO {
 
-    public boolean createEmployee(Employee emp) {
+    public boolean createEmployee(Employee employee) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.INSERT_EMPLOYEE)
         ) {
-            preparedStatement.setInt(1, emp.getId());
-            preparedStatement.setString(2, emp.getFirstName());
-            preparedStatement.setString(3, emp.getLastName());
-            preparedStatement.setString(4, emp.getMobileNo());
-            preparedStatement.setString(5, emp.getEmail());
-            preparedStatement.setObject(6, emp.getJoiningDate());
-            preparedStatement.setBoolean(7, emp.isActive());
+            preparedStatement.setInt(1, employee.getId());
+            preparedStatement.setString(2, employee.getFirstName());
+            preparedStatement.setString(3, employee.getLastName());
+            preparedStatement.setString(4, employee.getMobileNumber());
+            preparedStatement.setString(5, employee.getEmail());
+            preparedStatement.setObject(6, employee.getJoiningDate());
+            preparedStatement.setBoolean(7, employee.isActive());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -85,18 +85,18 @@ public class EmployeeDAO {
         return null;
     }
 
-    public boolean updateEmployee(Employee emp) {
+    public boolean updateEmployee(Employee employee) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.UPDATE_EMPLOYEE)
         ) {
-            preparedStatement.setString(1, emp.getFirstName());
-            preparedStatement.setString(2, emp.getLastName());
-            preparedStatement.setString(3, emp.getMobileNo());
-            preparedStatement.setString(4, emp.getEmail());
-            preparedStatement.setObject(5, emp.getJoiningDate());
-            preparedStatement.setBoolean(6, emp.isActive());
-            preparedStatement.setInt(7, emp.getId());
+            preparedStatement.setString(1, employee.getFirstName());
+            preparedStatement.setString(2, employee.getLastName());
+            preparedStatement.setString(3, employee.getMobileNumber());
+            preparedStatement.setString(4, employee.getEmail());
+            preparedStatement.setObject(5, employee.getJoiningDate());
+            preparedStatement.setBoolean(6, employee.isActive());
+            preparedStatement.setInt(7, employee.getId());
 
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {

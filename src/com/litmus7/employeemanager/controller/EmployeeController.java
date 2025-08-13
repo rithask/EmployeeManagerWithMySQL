@@ -9,10 +9,10 @@ public class EmployeeController {
 
     EmployeeService employeeService = new EmployeeService();
 
-    public Response<Employee> addEmployeeToDB(Employee emp) {
+    public Response<Employee> addEmployeeToDB(Employee employee) {
         try {
-            boolean added = employeeService.addEmployeeToDb(emp);
-            if (added) return Response.success("Employee added successfully", emp);
+            boolean added = employeeService.addEmployeeToDb(employee);
+            if (added) return Response.success("Employee added successfully", employee);
             else return Response.error("Failed to add employee");
         } catch (Exception e) {
             return Response.error(e.getMessage());
@@ -37,10 +37,10 @@ public class EmployeeController {
         }
     }
 
-    public Response<Employee> updateEmployeeInDB(Employee emp) {
+    public Response<Employee> updateEmployeeInDB(Employee employee) {
         try {
-            boolean updated = employeeService.updateEmployeeInDb(emp);
-            if (updated) return Response.success("Employee updated successfully", emp);
+            boolean updated = employeeService.updateEmployeeInDb(employee);
+            if (updated) return Response.success("Employee updated successfully", employee);
             else return Response.error("Failed to update employee");
         } catch (Exception e) {
             return Response.error(e.getMessage());
