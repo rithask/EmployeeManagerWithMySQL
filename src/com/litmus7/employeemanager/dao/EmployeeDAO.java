@@ -10,14 +10,20 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class EmployeeDAO {
+
+    private static final Logger logger = LogManager.getLogger(EmployeeDAO.class);
 
     public boolean createEmployee(Employee employee) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.INSERT_EMPLOYEE)
         ) {
+            logger.debug("Executing SQL query: " + Constants.INSERT_EMPLOYEE);
+
             preparedStatement.setInt(1, employee.getId());
             preparedStatement.setString(2, employee.getFirstName());
             preparedStatement.setString(3, employee.getLastName());
@@ -25,13 +31,23 @@ public class EmployeeDAO {
             preparedStatement.setString(5, employee.getEmail());
             preparedStatement.setObject(6, employee.getJoiningDate());
             preparedStatement.setBoolean(7, employee.isActive());
-            preparedStatement.executeUpdate();
+            int rows = preparedStatement.executeUpdate();
+            if (rows > 0) {
+                logger.info("Inserted employee with ID {}", employee.getId());
+                return true;
+            } else {
+                logger.warn("No rows inserted for employee with ID {}", employee.getId());
+                return false;
+            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error(
+                "Failed to insert employee with ID {} using query [{}]",
+                employee.getId(),
+                Constants.INSERT_EMPLOYEE,
+                e
+            );
             return false;
         }
-
-        return true;
     }
 
     public List<Employee> getAllEmployees() {
@@ -40,6 +56,8 @@ public class EmployeeDAO {
             Connection connection = DatabaseConnectionUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_ALL_EMPLOYEES)
         ) {
+            logger.debug("Executing SQL query [{}]", Constants.SELECT_ALL_EMPLOYEES);
+
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -53,8 +71,9 @@ public class EmployeeDAO {
                     new Employee(id, first_name, last_name, mobile_number, email, joining_date, active_status)
                 );
             }
+            logger.info("Fetched {} employees from database", employees.size());
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error("Error fetching all employees using query [{}]", Constants.SELECT_ALL_EMPLOYEES, e);
         }
 
         return employees;
@@ -65,10 +84,13 @@ public class EmployeeDAO {
             Connection connection = DatabaseConnectionUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_EMPLOYEE_BY_ID)
         ) {
+            logger.debug("Executing SQL query [{}] with id={}", Constants.SELECT_EMPLOYEE_BY_ID, id);
+
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.next()) {
+                logger.info("Found employee with ID {}", id);
                 return new Employee(
                     rs.getInt("id"),
                     rs.getString("first_name"),
@@ -78,9 +100,12 @@ public class EmployeeDAO {
                     rs.getObject("joining_date", LocalDate.class),
                     rs.getBoolean("active_status")
                 );
-            } else return null;
+            } else {
+                logger.warn("No employee found with ID {}", id);
+                return null;
+            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error("Error fetching employee with ID {} using query [{}]", id, Constants.SELECT_EMPLOYEE_BY_ID, e);
         }
         return null;
     }
@@ -90,6 +115,8 @@ public class EmployeeDAO {
             Connection connection = DatabaseConnectionUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.UPDATE_EMPLOYEE)
         ) {
+            logger.debug("Executing SQL query [{}] to update employee: {}", Constants.UPDATE_EMPLOYEE, employee);
+
             preparedStatement.setString(1, employee.getFirstName());
             preparedStatement.setString(2, employee.getLastName());
             preparedStatement.setString(3, employee.getMobileNumber());
@@ -98,9 +125,21 @@ public class EmployeeDAO {
             preparedStatement.setBoolean(6, employee.isActive());
             preparedStatement.setInt(7, employee.getId());
 
-            return preparedStatement.executeUpdate() > 0;
+            int rows = preparedStatement.executeUpdate();
+            if (rows > 0) {
+                logger.info("Updated employee with ID {}", employee.getId());
+                return true;
+            } else {
+                logger.warn("No employee updated for ID {}", employee.getId());
+                return false;
+            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error(
+                "Error updating employee with ID {} using query [{}]",
+                employee.getId(),
+                Constants.UPDATE_EMPLOYEE,
+                e
+            );
             return false;
         }
     }
@@ -110,10 +149,18 @@ public class EmployeeDAO {
             Connection connection = DatabaseConnectionUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.DELETE_EMPLOYEE)
         ) {
+            logger.debug("Executing SQL query [{}] to delete employee with ID {}", Constants.DELETE_EMPLOYEE, id);
             preparedStatement.setInt(1, id);
-            return preparedStatement.executeUpdate() > 0;
+            int rows = preparedStatement.executeUpdate();
+            if (rows > 0) {
+                logger.info("Deleted employee with ID {}", id);
+                return true;
+            } else {
+                logger.warn("No employee deleted with ID {}", id);
+                return false;
+            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error("Error deleting employee with ID {} using query [{}]", id, Constants.DELETE_EMPLOYEE, e);
             return false;
         }
     }
@@ -123,13 +170,14 @@ public class EmployeeDAO {
             Connection connection = DatabaseConnectionUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_EMPLOYEE_BY_ID)
         ) {
+            logger.debug("Executing SQL query: " + Constants.SELECT_EMPLOYEE_BY_ID);
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 return true;
             } else return false;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error("Error executing SQL query:  " + e);
             return false;
         }
     }
@@ -139,12 +187,13 @@ public class EmployeeDAO {
             Connection connection = DatabaseConnectionUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_EMPLOYEE_BY_EMAIL)
         ) {
+            logger.debug("Executing SQL query: " + Constants.SELECT_EMPLOYEE_BY_EMAIL);
             preparedStatement.setString(1, email);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) return true;
             else return false;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error("Error executing SQL query:  " + e);
             return false;
         }
     }
@@ -156,12 +205,13 @@ public class EmployeeDAO {
                 Constants.SELECT_EMPLOYEE_BY_MOBILE_NUMBER
             )
         ) {
+            logger.debug("Executing SQL query: " + Constants.SELECT_EMPLOYEE_BY_MOBILE_NUMBER);
             preparedStatement.setString(1, mobileNumber);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) return true;
             else return false;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error("Error executing SQL query:  " + e);
             return false;
         }
     }
