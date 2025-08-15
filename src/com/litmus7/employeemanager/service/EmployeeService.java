@@ -27,11 +27,12 @@ public class EmployeeService {
     }
 
     public List<Employee> getAllEmployeesFromDB() {
-        if (employeeDAO.getAllEmployees().isEmpty()) {
+        List<Employee> employees = employeeDAO.getAllEmployees();
+        if (employees.isEmpty()) {
             throw new ValidationException("No employees found");
         }
 
-        return employeeDAO.getAllEmployees();
+        return employees;
     }
 
     public Employee getEmployeeByIdFromDB(int id) {
