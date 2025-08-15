@@ -166,52 +166,37 @@ public class EmployeeDAO {
     }
 
     public boolean employeeExistsById(int id) {
-        try (
-            Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_EMPLOYEE_BY_ID)
-        ) {
-            logger.debug("Executing SQL query: " + Constants.SELECT_EMPLOYEE_BY_ID);
-            preparedStatement.setInt(1, id);
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                return true;
-            } else return false;
-        } catch (SQLException e) {
-            logger.error("Error executing SQL query:  " + e);
-            return false;
-        }
+        return recordExists(Constants.SELECT_EMPLOYEE_BY_ID, id, "id=" + id);
     }
 
     public boolean employeeExistsByEmail(String email) {
-        try (
-            Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Constants.SELECT_EMPLOYEE_BY_EMAIL)
-        ) {
-            logger.debug("Executing SQL query: " + Constants.SELECT_EMPLOYEE_BY_EMAIL);
-            preparedStatement.setString(1, email);
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) return true;
-            else return false;
-        } catch (SQLException e) {
-            logger.error("Error executing SQL query:  " + e);
-            return false;
-        }
+        return recordExists(Constants.SELECT_EMPLOYEE_BY_EMAIL, email, "email=" + email);
     }
 
     public boolean employeeExistsByMobileNumber(String mobileNumber) {
+        return recordExists(Constants.SELECT_EMPLOYEE_BY_MOBILE_NUMBER, mobileNumber, "mobile=" + mobileNumber);
+    }
+
+    private boolean recordExists(String sql, Object param, String label) {
         try (
             Connection connection = DatabaseConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                Constants.SELECT_EMPLOYEE_BY_MOBILE_NUMBER
-            )
+            PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            logger.debug("Executing SQL query: " + Constants.SELECT_EMPLOYEE_BY_MOBILE_NUMBER);
-            preparedStatement.setString(1, mobileNumber);
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) return true;
-            else return false;
+            logger.debug("Executing existence check [{}] with param {}", sql, param);
+
+            ps.setObject(1, param);
+            ResultSet rs = ps.executeQuery();
+            boolean exists = rs.next();
+
+            if (exists) {
+                logger.info("Record exists for {}", label);
+            } else {
+                logger.warn("Record not found for {}", label);
+            }
+
+            return exists;
         } catch (SQLException e) {
-            logger.error("Error executing SQL query:  " + e);
+            logger.error("Error executing existence check [{}] with param {}", sql, param, e);
             return false;
         }
     }
