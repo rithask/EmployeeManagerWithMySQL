@@ -28,7 +28,7 @@ public class ValidationUtil {
 
     public static boolean isValidJoiningDate(LocalDate date) {
         if (date == null) return false;
-        LocalDate lowerBound = LocalDate.of(2009, 7, 1);
+        LocalDate lowerBound = LocalDate.parse(Constants.COMPANY_FOUNDED_DATE);
         LocalDate today = LocalDate.now();
         return date.isAfter(lowerBound) && date.isBefore(today);
     }

@@ -2,6 +2,9 @@ package com.litmus7.employeemanager.constants;
 
 public class Constants {
 
+    // general
+    public static final String COMPANY_FOUNDED_DATE = "2009-07-01";
+
     // regex
     public static final String NAME_REGEX = "^[A-za-z\\s'-]{2,50}$";
     public static final String MOBILE_NUMBER_REGEX = "^[1-9][0-9]{9}$";
