@@ -1,6 +1,8 @@
 package com.litmus7.employeemanager.dao;
 
 import com.litmus7.employeemanager.constants.Constants;
+import com.litmus7.employeemanager.exception.EmployeeDaoException;
+import com.litmus7.employeemanager.exception.EmployeeNotFoundException;
 import com.litmus7.employeemanager.model.Employee;
 import com.litmus7.employeemanager.util.DatabaseConnectionUtil;
 import java.sql.Connection;
@@ -46,7 +48,7 @@ public class EmployeeDAO {
                 Constants.INSERT_EMPLOYEE,
                 e
             );
-            return false;
+            throw new EmployeeDaoException("Database error while fetching employee", e);
         }
     }
 
@@ -72,8 +74,12 @@ public class EmployeeDAO {
                 );
             }
             logger.info("Fetched {} employees from database", employees.size());
+            if (employees.isEmpty()) {
+                throw new EmployeeNotFoundException("No employees found");
+            }
         } catch (SQLException e) {
             logger.error("Error fetching all employees using query [{}]", Constants.SELECT_ALL_EMPLOYEES, e);
+            throw new EmployeeDaoException("Database error while fetching employee", e);
         }
 
         return employees;
@@ -102,12 +108,12 @@ public class EmployeeDAO {
                 );
             } else {
                 logger.warn("No employee found with ID {}", id);
-                return null;
+                throw new EmployeeNotFoundException("No employee found with id" + id);
             }
         } catch (SQLException e) {
             logger.error("Error fetching employee with ID {} using query [{}]", id, Constants.SELECT_EMPLOYEE_BY_ID, e);
+            throw new EmployeeDaoException("Database error while fetching employee", e);
         }
-        return null;
     }
 
     public boolean updateEmployee(Employee employee) {
@@ -140,7 +146,7 @@ public class EmployeeDAO {
                 Constants.UPDATE_EMPLOYEE,
                 e
             );
-            return false;
+            throw new EmployeeDaoException("Database error while fetching employee", e);
         }
     }
 
@@ -161,7 +167,7 @@ public class EmployeeDAO {
             }
         } catch (SQLException e) {
             logger.error("Error deleting employee with ID {} using query [{}]", id, Constants.DELETE_EMPLOYEE, e);
-            return false;
+            throw new EmployeeDaoException("Database error while fetching employee", e);
         }
     }
 
@@ -197,7 +203,7 @@ public class EmployeeDAO {
             return exists;
         } catch (SQLException e) {
             logger.error("Error executing existence check [{}] with param {}", sql, param, e);
-            return false;
+            throw new EmployeeDaoException("Database error while fetching employee", e);
         }
     }
 }
